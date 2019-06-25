@@ -4,12 +4,10 @@ go 1.12
 
 require (
 	github.com/AndreasBriese/bbloom v0.0.0-20190306092124-e2d15f34fcf9 // indirect
-	github.com/PuerkitoBio/goquery v1.5.0 // indirect
 	github.com/beme/abide v0.0.0-20181227202223-4c487ef9d895
 	github.com/boltdb/bolt v1.3.1 // indirect
 	github.com/dgryski/go-farm v0.0.0-20190423205320-6a90982ecee2 // indirect
 	github.com/dustin/go-humanize v1.0.0
-	github.com/dustmop/soup v1.1.2-0.20190516214245-38228baa104e // indirect
 	github.com/fatih/color v1.7.0
 	github.com/ghodss/yaml v1.0.0
 	github.com/gofrs/flock v0.7.1 // indirect
@@ -34,7 +32,6 @@ require (
 	github.com/multiformats/go-multiaddr v0.0.4
 	github.com/multiformats/go-multicodec v0.1.6
 	github.com/multiformats/go-multihash v0.0.5
-	github.com/paulmach/orb v0.1.3 // indirect
 	github.com/qri-io/apiutil v0.1.0
 	github.com/qri-io/bleve v0.5.1-0.20190530204435-e47ddda1936d
 	github.com/qri-io/dag v0.1.0
