@@ -5,8 +5,10 @@ go 1.12
 require github.com/campoy/gomodtest v2.0.0+incompatible
 
 require (
+	github.com/AndreasBriese/bbloom v0.0.0-20190306092124-e2d15f34fcf9 // indirect
 	github.com/beme/abide v0.0.0-20181227202223-4c487ef9d895
 	github.com/boltdb/bolt v1.3.1 // indirect
+	github.com/dgryski/go-farm v0.0.0-20190423205320-6a90982ecee2 // indirect
 	github.com/dustin/go-humanize v1.0.0
 	github.com/fatih/color v1.7.0
 	github.com/ghodss/yaml v1.0.0
@@ -46,10 +48,11 @@ require (
 	github.com/qri-io/starlib v0.4.1
 	github.com/qri-io/varName v0.1.0
 	github.com/sergi/go-diff v1.0.0
-	github.com/spf13/cobra v0.0.4
+	github.com/spf13/cobra v0.0.5
 	github.com/theckman/go-flock v0.7.1
 	go.starlark.net v0.0.0-20190528202925-30ae18b8564f
 	golang.org/x/crypto v0.0.0-20190513172903-22d7a77e9e5f
-	golang.org/x/sys v0.0.0-20190522044717-8097e1b27ff5
+	golang.org/x/net v0.0.0-20190613194153-d28f0bde5980 // indirect
+	golang.org/x/sys v0.0.0-20190614160838-b47fdc937951
 	gopkg.in/yaml.v2 v2.2.2
 )
