@@ -226,6 +226,7 @@ github.com/ipfs/go-ds-measure v0.0.1 h1:PrCueug+yZLkDCOthZTXKinuoCal/GvlAT7cNxzr
 github.com/ipfs/go-ds-measure v0.0.1/go.mod h1:wiH6bepKsgyNKpz3nyb4erwhhIVpIxnZbsjN1QpVbbE=
 github.com/ipfs/go-fs-lock v0.0.1 h1:XHX8uW4jQBYWHj59XXcjg7BHlHxV9ZOYs6Y43yb7/l0=
 github.com/ipfs/go-fs-lock v0.0.1/go.mod h1:DNBekbboPKcxs1aukPSaOtFA3QfSdi5C855v0i9XJ8Y=
+github.com/ipfs/go-ipfs v0.4.19 h1:ioUvuv1L3Zb9XgPi6S8selFMMlTa5AntQzVGvaoYHXM=
 github.com/ipfs/go-ipfs v0.4.19/go.mod h1:iXzbK+Wa6eePj3jQg/uY6Uoq5iOwY+GToD/bgaRadto=
 github.com/ipfs/go-ipfs v0.4.20-rc1/go.mod h1:3cOz+rIOsTnTyh2uNJDqZQ8QljqR0oW3k8GSE8rsz9Y=
 github.com/ipfs/go-ipfs v0.4.20-rc2/go.mod h1:W8aP61Gt96DDfp7aaIyp1bz/Bqgx4z90uDjUoOhFGp4=
@@ -641,6 +642,7 @@ github.com/qri-io/qfs v0.1.0 h1:XgDhon13qLlwJHI2m0FAc2EhZEcrqMPwizvgfQXHzB8=
 github.com/qri-io/qfs v0.1.0/go.mod h1:vZ5gVAYKaW8bDLh8U8DEr3s/1JyNzQJg1Rg9HYS+VZo=
 github.com/qri-io/registry v0.1.0 h1:e4BBcVCfim++7Y0HI9DTKWzeSjNiBqXrKzs62M/GAHw=
 github.com/qri-io/registry v0.1.0/go.mod h1:sSsNnCZPmyG3IGOisEzTeIEwzCXunLpFsnKS16DKw/c=
+github.com/qri-io/starlib v0.3.2 h1:u4sheRdjV9jzIzRqjDYKNA4MiYyfxaXYwgamYNMqz5A=
 github.com/qri-io/starlib v0.3.2/go.mod h1:qJyrmewkHapET20kNoO5JF1U4bTdxFs46HWViiI3Sko=
 github.com/qri-io/starlib v0.4.0 h1:jsq4lZuqTVY+rqGuV5T3YZd5BbgqmRMi00QY+crXn8U=
 github.com/qri-io/starlib v0.4.0/go.mod h1:JapoWfwTbokzzGktLGV4671KiMnLDmJYtVJfZHhh2c4=
@@ -680,6 +682,7 @@ github.com/spf13/cast v1.3.0/go.mod h1:Qx5cxh0v+4UWYiBimWS+eyWzqEqokIECu5etghLkU
 github.com/spf13/cobra v0.0.2/go.mod h1:1l0Ry5zgKvJasoi3XT1TypsSe7PqH0Sj9dhYf7v3XqQ=
 github.com/spf13/cobra v0.0.4 h1:S0tLZ3VOKl2Te0hpq8+ke0eSJPfCnNTPiDlsfwi1/NE=
 github.com/spf13/cobra v0.0.4/go.mod h1:3K3wKZymM7VvHMDS9+Akkh4K60UwM26emMESw8tLCHU=
+github.com/spf13/cobra v0.0.5 h1:f0B+LkLX6DtmRH1isoNA9VTtNUK9K8xYd28JNNfOv/s=
 github.com/spf13/cobra v0.0.5/go.mod h1:3K3wKZymM7VvHMDS9+Akkh4K60UwM26emMESw8tLCHU=
 github.com/spf13/jwalterweatherman v0.0.0-20180109140146-7c0cea34c8ec/go.mod h1:cQK4TGJAtQXfYWX+Ddv3mKDzgVb68N+wFjFa4jdeBTo=
 github.com/spf13/jwalterweatherman v1.0.0/go.mod h1:cQK4TGJAtQXfYWX+Ddv3mKDzgVb68N+wFjFa4jdeBTo=
