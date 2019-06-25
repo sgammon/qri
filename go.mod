@@ -2,6 +2,8 @@ module github.com/qri-io/qri
 
 go 1.12
 
+require github.com/campoy/gomodtest v2.0.0+incompatible
+
 require (
 	github.com/beme/abide v0.0.0-20181227202223-4c487ef9d895
 	github.com/boltdb/bolt v1.3.1 // indirect
