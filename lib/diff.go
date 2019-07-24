@@ -180,3 +180,22 @@ func allCSVRows(file qfs.File) (recs []interface{}, err error) {
 	}
 	return recs, nil
 }
+
+func (r *DatasetRequests) MergeDiffs(merged *DiffResponse, inputs []DiffResponse) (err error) {
+	merged.Stat = &DiffStat{}
+	for _, inp := range inputs {
+		merged.Stat.Left += inp.Stat.Left
+		merged.Stat.Right += inp.Stat.Right
+		merged.Stat.LeftWeight += inp.Stat.LeftWeight
+		merged.Stat.RightWeight += inp.Stat.RightWeight
+		merged.Stat.Inserts += inp.Stat.Inserts
+		merged.Stat.Updates += inp.Stat.Updates
+		merged.Stat.Deletes += inp.Stat.Deletes
+		merged.Stat.Moves += inp.Stat.Moves
+		merged.Diff = append(merged.Diff, inp.Diff...)
+	}
+
+	//merged.Diff = []*Delta{}
+
+	return nil
+}

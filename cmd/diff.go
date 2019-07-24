@@ -2,8 +2,11 @@ package cmd
 
 import (
 	"encoding/json"
+	_"fmt"
+	"os"
 
 	"github.com/qri-io/ioes"
+	"github.com/qri-io/qri/fsi"
 	"github.com/qri-io/qri/lib"
 	"github.com/spf13/cobra"
 )
@@ -71,6 +74,7 @@ type DiffOptions struct {
 	Selector string
 	Format   string
 	Summary  bool
+	IsLinked bool
 
 	DatasetRequests *lib.DatasetRequests
 }
@@ -92,6 +96,15 @@ func (o *DiffOptions) Complete(f Factory, args []string) (err error) {
 		o.Right = args[0]
 	}
 
+	// Correct?
+	dir, _ := os.Getwd()
+	ref, ok := fsi.GetLinkedFilesysRef(dir)
+	if ok {
+		o.Left = ref
+		o.Right = ref
+		o.IsLinked = true
+	}
+
 	o.DatasetRequests, err = f.DatasetRequests()
 	return
 }
@@ -102,6 +115,77 @@ func (o *DiffOptions) Run() (err error) {
 		LeftPath:  o.Left,
 		RightPath: o.Right,
 		Selector:  o.Selector,
+	}
+
+	if o.IsLinked {
+
+		//fmt.Printf("diff.... linked...\n")
+
+		p.RightPath = "meta.json"
+		p.Selector = "meta"
+		res := lib.DiffResponse{}
+		if err = o.DatasetRequests.Diff(p, &res); err != nil {
+			return err
+		}
+
+		/*
+		fmt.Printf("========================================\n")
+		fmt.Printf("left  = %d\n", res.Stat.Left)
+		fmt.Printf("right = %d\n", res.Stat.Right)
+		fmt.Printf("leftweight  = %d\n", res.Stat.LeftWeight)
+		fmt.Printf("rightweight = %d\n", res.Stat.RightWeight)
+		fmt.Printf("inserts = %d\n", res.Stat.Inserts)
+		fmt.Printf("updates = %d\n", res.Stat.Updates)
+		fmt.Printf("deletes = %d\n", res.Stat.Deletes)
+		fmt.Printf("moves   = %d\n", res.Stat.Moves)
+*/
+		//_ = printDiff(o.Out, res, o.Summary)
+
+		res0 := res
+		for i, d := range res0.Diff {
+			res0.Diff[i].Path = "meta/" + d.Path
+		}
+
+		if _, err = os.Stat("body.csv"); !os.IsNotExist(err) {
+			p.RightPath = "body.csv"
+		}
+		if _, err = os.Stat("body.json"); !os.IsNotExist(err) {
+			p.RightPath = "body.json"
+		}
+		p.Selector = "body"
+		res = lib.DiffResponse{}
+		if err = o.DatasetRequests.Diff(p, &res); err != nil {
+			return err
+		}
+		//_ = printDiff(o.Out, res, o.Summary)
+/*
+		fmt.Printf("========================================\n")
+		fmt.Printf("left  = %d\n", res.Stat.Left)
+		fmt.Printf("right = %d\n", res.Stat.Right)
+		fmt.Printf("leftweight  = %d\n", res.Stat.LeftWeight)
+		fmt.Printf("rightweight = %d\n", res.Stat.RightWeight)
+		fmt.Printf("inserts = %d\n", res.Stat.Inserts)
+		fmt.Printf("updates = %d\n", res.Stat.Updates)
+		fmt.Printf("deletes = %d\n", res.Stat.Deletes)
+		fmt.Printf("moves   = %d\n", res.Stat.Moves)
+*/
+
+		res1 := res
+		for i, d := range res1.Diff {
+			res1.Diff[i].Path = "body/" + d.Path
+		}
+
+/*
+		for i, d := range res1.Diff {
+			fmt.Printf("%d: Path={%s} Value={%s} Spath={%s} Svalue={%s}\n", i, d.Path, d.Value, d.SourcePath, d.SourceValue)
+		}
+*/
+
+		mergedResponse := lib.DiffResponse{}
+		_ = o.DatasetRequests.MergeDiffs(&mergedResponse, []lib.DiffResponse{res0, res1})
+		_ = printDiff(o.Out, &mergedResponse, o.Summary)
+
+		return nil
 	}
 
 	// TODO(dlong): Reenable `use` functionality for this command.
