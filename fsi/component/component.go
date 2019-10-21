@@ -49,6 +49,11 @@ func ConvertDatasetToComponents(ds *dataset.Dataset, qfilesys qfs.Filesystem) Co
 		cc.Value = ds.Commit
 		dc.Subcomponents["commit"] = &cc
 	}
+	if ds.Viz != nil {
+		vc := VizComponent{}
+		vc.Value = ds.Viz
+		dc.Subcomponents["viz"] = &vc
+	}
 	if ds.BodyPath != "" {
 		bc := BodyComponent{Resolver: qfilesys}
 		bc.SourceFile = ds.BodyPath
@@ -87,6 +92,11 @@ func ToDataset(comp Component) (*dataset.Dataset, error) {
 	}
 	if stComponent := comp.Base().GetSubcomponent("structure"); stComponent != nil {
 		if err := stComponent.LoadAndFill(ds); err != nil {
+			return nil, err
+		}
+	}
+	if vzComponent := comp.Base().GetSubcomponent("viz"); vzComponent != nil {
+		if err := vzComponent.LoadAndFill(ds); err != nil {
 			return nil, err
 		}
 	}

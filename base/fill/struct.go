@@ -185,9 +185,17 @@ func putValueToPlace(val interface{}, place reflect.Value, collector *ErrorColle
 			// If slice is nil, nothing more to do.
 			return
 		}
+
 		slice, ok := val.([]interface{})
 		if !ok {
-			collector.Add(fmt.Errorf("need type slice, value %s", val))
+			// need to check if slice is actually a slice of bytes
+			// if so, set the underlying bytes
+			bytes, ok := val.([]byte)
+			if !ok {
+				collector.Add(fmt.Errorf("need type slice, value %v", val))
+				return
+			}
+			place.SetBytes(bytes)
 			return
 		}
 		// Get size of type of the slice to deserialize.
@@ -212,7 +220,7 @@ func putValueToPlace(val interface{}, place reflect.Value, collector *ErrorColle
 		}
 		slice, ok := val.([]interface{})
 		if !ok {
-			collector.Add(fmt.Errorf("need type slice, value %s", val))
+			collector.Add(fmt.Errorf("need type array, value %s", val))
 			return
 		}
 		// Get size of type of the slice to deserialize.

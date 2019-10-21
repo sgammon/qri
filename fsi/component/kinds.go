@@ -5,11 +5,12 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"gopkg.in/yaml.v2"
 	"io"
 	"io/ioutil"
 	"os"
 	"path/filepath"
+
+	"gopkg.in/yaml.v2"
 
 	"github.com/qri-io/dataset"
 	"github.com/qri-io/dataset/detect"
@@ -504,17 +505,22 @@ func (bc *BaseComponent) LoadFile() (map[string]interface{}, error) {
 	bc.IsLoaded = true
 	// Parse the file bytes using the specified format
 	fields := make(map[string]interface{})
-	if bc.Format == "json" {
+	switch bc.Format {
+	case "json":
 		if err = json.Unmarshal(data, &fields); err != nil {
 			bc.SetErrorAsProblem("parse", err)
 			return nil, err
 		}
 		return fields, nil
-	} else if bc.Format == "yaml" {
+	case "yaml":
 		if err = yaml.Unmarshal(data, &fields); err != nil {
 			bc.SetErrorAsProblem("parse", err)
 			return nil, err
 		}
+		return fields, nil
+	case "md":
+	case "html":
+		fields["ScriptBytes"] = data
 		return fields, nil
 	}
 	return nil, fmt.Errorf("unknown format \"%s\"", bc.Format)
@@ -540,6 +546,8 @@ func (bc *BaseComponent) SetSubcomponent(name string, base BaseComponent) Compon
 		component = &CommitComponent{BaseComponent: base}
 	} else if name == "structure" {
 		component = &StructureComponent{BaseComponent: base}
+	} else if name == "viz" {
+		component = &VizComponent{BaseComponent: base}
 	} else if name == "body" {
 		component = &BodyComponent{BaseComponent: base}
 	} else if name == "dataset" {
@@ -580,6 +588,75 @@ func writeComponentFile(value interface{}, dirPath string, basefile string) erro
 	err = ioutil.WriteFile(filepath.Join(dirPath, basefile), data, os.ModePerm)
 	if err != nil {
 		return err
+	}
+	return nil
+}
+
+// VizComponent represents a meta component
+type VizComponent struct {
+	BaseComponent
+	Value *dataset.Viz
+}
+
+// Compare compares to another component
+func (vc *VizComponent) Compare(compare Component) (bool, error) {
+	other, ok := compare.(*VizComponent)
+	if !ok {
+		return false, nil
+	}
+	if err := vc.LoadAndFill(nil); err != nil {
+		return false, err
+	}
+	if err := compare.LoadAndFill(nil); err != nil {
+		return false, err
+	}
+	return compareComponentData(vc.Value, other.Value)
+}
+
+// WriteTo writes the component as a file to the directory
+func (vc *VizComponent) WriteTo(dirPath string) error {
+	if err := vc.LoadAndFill(nil); err != nil {
+		return err
+	}
+	if vc.Value != nil && !vc.Value.IsEmpty() {
+		return writeComponentFile(vc.Value.ScriptBytes, dirPath, fmt.Sprintf("readme.%s", vc.Format))
+	}
+	return nil
+}
+
+// RemoveFrom removes the component file from the directory
+func (vc *VizComponent) RemoveFrom(dirPath string) error {
+	// TODO(dlong): Does component have SourceFile set?
+	if err := os.Remove(filepath.Join(dirPath, fmt.Sprintf("readme.%s", vc.Format))); err != nil && !os.IsNotExist(err) {
+		return err
+	}
+	return nil
+}
+
+// DropDerivedValues drops derived values from the component
+func (vc *VizComponent) DropDerivedValues() {
+	vc.Value.DropDerivedValues()
+}
+
+// LoadAndFill loads data from the component source file and assigns it
+func (vc *VizComponent) LoadAndFill(ds *dataset.Dataset) error {
+	if vc.Base().IsLoaded {
+		return nil
+	}
+	if vc.Value != nil {
+		vc.Base().IsLoaded = true
+		return nil
+	}
+	fields, err := vc.Base().LoadFile()
+	if err != nil {
+		return err
+	}
+	vc.Value = &dataset.Viz{}
+	if err := fill.Struct(fields, vc.Value); err != nil {
+		return err
+	}
+	if ds != nil {
+		ds.Viz = vc.Value
 	}
 	return nil
 }
