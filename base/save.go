@@ -84,6 +84,7 @@ func SaveDataset(ctx context.Context, r repo.Repo, str ioes.IOStreams, changes *
 		// dry-runs store to an in-memory repo
 		r, err = repo.NewMemRepo(pro, cafs.NewMapstore(), r.Filesystem(), profile.NewMemStore())
 		if err != nil {
+			log.Debugf("creating new memRepo: %s", err)
 			return
 		}
 	}
@@ -163,14 +164,17 @@ func CreateDataset(ctx context.Context, r repo.Repo, streams ioes.IOStreams, ds,
 
 	pro, err = r.Profile()
 	if err != nil {
+		log.Debugf("getting repo profile: %s", err)
 		return
 	}
 
 	if err = ValidateDataset(ds); err != nil {
+		log.Debugf("ValidateDataset: %s", err)
 		return
 	}
 
 	if path, err = dsfs.CreateDataset(ctx, r.Store(), ds, dsPrev, r.PrivateKey(), pin, force, shouldRender); err != nil {
+		log.Debugf("dsfs.CreateDataset: %s", err)
 		return
 	}
 	if ds.PreviousPath != "" && ds.PreviousPath != "/" {
@@ -193,6 +197,7 @@ func CreateDataset(ctx context.Context, r repo.Repo, streams ioes.IOStreams, ds,
 	}
 
 	if err = r.PutRef(ref); err != nil {
+		log.Debugf("r.PutRef: %s", err)
 		return
 	}
 
@@ -201,10 +206,12 @@ func CreateDataset(ctx context.Context, r repo.Repo, streams ioes.IOStreams, ds,
 	ds.Peername = pro.Peername
 	ds.Path = path
 	if err = r.Logbook().WriteVersionSave(ctx, ds); err != nil && err != logbook.ErrNoLogbook {
+		log.Debugf("logbook.WriteVersionSave: %s", err)
 		return
 	}
 
 	if err = ReadDataset(ctx, r, &ref); err != nil {
+		log.Debugf("ReadDataset: %s", err)
 		return
 	}
 
